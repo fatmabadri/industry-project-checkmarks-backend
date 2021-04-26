@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "CheckmarksService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

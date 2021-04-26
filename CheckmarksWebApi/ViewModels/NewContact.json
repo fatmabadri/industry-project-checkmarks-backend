@@ -1,0 +1,25 @@
+{
+	"data": {
+		"name":"Bruce Linky",
+		"type":"Person",
+		"email_addresses": [{
+			"name": "Other",
+			"address": "abc@abc.com"
+		}],
+		"phone_numbers": [{
+			"name": "Other",
+			"number": "7787787778"
+		},{
+			"name": "Fax",
+			"number": "1234123412"
+		}],
+		"addresses": [{
+			"name":"Other",
+			"street":"1234 fake street",
+			"province":"BC",
+			"postal_code":"a1b2c3",
+			"country":"Canada",
+			"primary":true
+		}]
+	}
+}
