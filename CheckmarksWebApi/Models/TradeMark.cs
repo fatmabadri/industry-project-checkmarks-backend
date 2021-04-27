@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CheckmarksWebApi.Models
 {
-    public class TradeMark
+    public class Trademark
     {
         public string Title { get; set; }
         // "NIKE"

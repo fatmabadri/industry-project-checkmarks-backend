@@ -38,7 +38,7 @@ namespace CheckmarksWebApi.Controllers
         // GET: api/trademark
         // tQ: initial solution only--GET requests should not affect server state (results should be cached)
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TradeMark>>> Index(string searchString)
+        public async Task<ActionResult<IEnumerable<Trademark>>> Index(string searchString)
         {
             return await _context.Trademarks.ToListAsync();
         }
