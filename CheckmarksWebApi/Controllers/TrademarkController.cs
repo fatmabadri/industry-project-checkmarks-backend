@@ -19,13 +19,12 @@ namespace CheckmarksWebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("Policy")]
-    public class TrademarkController
+    public class TrademarkController : ControllerBase
     { 
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
         private ILogger<EmailController> _logger;
-        private string uploadsFolder;
 
         public TrademarkController(IWebHostEnvironment hostingEnvironment, ApplicationDbContext context, IConfiguration configuration, ILogger<EmailController> logger)
         {
@@ -40,7 +39,34 @@ namespace CheckmarksWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Trademark>>> Index(string searchString)
         {
-            return await _context.Trademarks.ToListAsync();
+            try {
+                var trademarks = _context.Trademarks;
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    var trademarks_query = trademarks
+                        .Where(tm => (tm.Title.Contains(searchString) || tm.Owner.Contains(searchString)));
+                    var trademarks_ret = trademarks_query.Select(tm => new {
+                        tm.Title,
+                        tm.FileDate,
+                        tm.RegDate,
+                        tm.IntrnlRenewDate,
+                        tm.Owner,
+                        tm.StatusDescEn,
+                        tm.NiceClasses,
+                        tm.TmType,
+                        tm.ApplicationNumberL,
+                        tm.MediaUrls
+                    });
+                    return Ok(trademarks_ret);
+                } else
+                {
+                    return BadRequest("Search string empty");
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         
