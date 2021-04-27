@@ -90,8 +90,27 @@ namespace CheckmarksWebApi.Controllers
                 {
                     _context.Trademarks.Add(
                         new Trademark(
+
                         )
                     );
+
+                    // NICEClass[] NiceClasses
+                    // int[] TmType 
+                    // string[] ApplicationNumberL 
+                    // string[] MediaUrls 
+
+                    HashSet<int> set = new HashSet<int>();
+
+                    foreach (var nc in tm.niceClasses)
+                    {
+                        set.Add(nc);
+                    }
+
+                    foreach (var nc in set)
+                    {
+                        tm.niceClasses.Add(new MovieGenre(m.id, g));
+
+                    }
                 }
             } else
             {
