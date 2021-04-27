@@ -13,6 +13,8 @@ using CheckmarksWebApi.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using CheckmarksWebApi.Data.CIPOResponse;
+using Newtonsoft.Json;
 
 namespace CheckmarksWebApi.Controllers
 {
@@ -57,7 +59,8 @@ namespace CheckmarksWebApi.Controllers
                         tm.ApplicationNumberL,
                         tm.MediaUrls
                     });
-                    return Ok(trademarks_ret);
+                    var trademarks_lst = await trademarks_ret.ToListAsync();
+                    return Ok(trademarks_lst);
                 } else
                 {
                     return BadRequest("Search string empty");
@@ -69,6 +72,31 @@ namespace CheckmarksWebApi.Controllers
             }
         }
 
-        
+        public async Task<ActionResult<IEnumerable<Trademark>>> GetTMsFromCIPO(string searchString)
+        {
+            // tQ: full string
+            var cipoSearchString = $"https://www.ic.gc.ca/app/api/ic/ctr/trademarks/search/.json?dataBeanJson=%7B%22selectField1%22%3A%22all%22%2C%22textField1%22%3A%22{searchString}%22%2C%22category%22%3A%22%22%2C%22type%22%3A%22%22%2C%22status%22%3A%22%22%2C%22viennaField%22%3A%5B%5D%2C%22searchDates%22%3A%5B%5D%2C%22selectMaxDoc%22%3A%22500%22%2C%22language%22%3A%22eng%22%7D&draw=1&columns%5B0%5D%5Bdata%5D=applicationNumber&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=true&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B1%5D%5Bdata%5D=intrnlRegNum&columns%5B1%5D%5Bname%5D=&columns%5B1%5D%5Bsearchable%5D=true&columns%5B1%5D%5Borderable%5D=true&columns%5B1%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B1%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B2%5D%5Bdata%5D=title&columns%5B2%5D%5Bname%5D=&columns%5B2%5D%5Bsearchable%5D=true&columns%5B2%5D%5Borderable%5D=true&columns%5B2%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B2%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B3%5D%5Bdata%5D=tmType&columns%5B3%5D%5Bname%5D=&columns%5B3%5D%5Bsearchable%5D=true&columns%5B3%5D%5Borderable%5D=false&columns%5B3%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B3%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B4%5D%5Bdata%5D=statusDescEn&columns%5B4%5D%5Bname%5D=&columns%5B4%5D%5Bsearchable%5D=true&columns%5B4%5D%5Borderable%5D=true&columns%5B4%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B4%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B5%5D%5Bdata%5D=niceClasses&columns%5B5%5D%5Bname%5D=&columns%5B5%5D%5Bsearchable%5D=true&columns%5B5%5D%5Borderable%5D=false&columns%5B5%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B5%5D%5Bsearch%5D%5Bregex%5D=false&columns%5B6%5D%5Bdata%5D=mediaUrls&columns%5B6%5D%5Bname%5D=&columns%5B6%5D%5Bsearchable%5D=true&columns%5B6%5D%5Borderable%5D=false&columns%5B6%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B6%5D%5Bsearch%5D%5Bregex%5D=false&start=0&length=500&search%5Bvalue%5D=&search%5Bregex%5D=false&_=1619560007739";
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(cipoSearchString);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string dataResponse = await response.Content.ReadAsStringAsync();
+
+                Root apiObjects = JsonConvert.DeserializeObject<Root>(dataResponse);
+
+                foreach (var tm in apiObjects.data)
+                {
+                    _context.Trademarks.Add(
+                        new Trademark(
+                        )
+                    );
+                }
+            } else
+            {
+
+            }
+        }
     }
 }
