@@ -37,7 +37,7 @@ namespace CheckmarksWebApi.Controllers
         }
 
         // GET: api/trademark
-        [HttpGet("{searchString}")]
+        //[HttpGet("{searchString}")]
         public async Task<ActionResult<IEnumerable<Trademark>>> Index(string searchString)
         {
             try {
@@ -80,7 +80,6 @@ namespace CheckmarksWebApi.Controllers
             }
         }
 
-        [Route("api/(controller)/test")]
         [HttpGet("{searchString}")]
         public async Task<ActionResult<IEnumerable<Trademark>>> GetTMsFromCIPO(string searchString)
         {
@@ -89,6 +88,7 @@ namespace CheckmarksWebApi.Controllers
 
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(cipoSearchString);
+            string dataResponse = await response.Content.ReadAsStringAsync();
 
             return Ok(response);
 
