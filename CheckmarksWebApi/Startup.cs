@@ -59,7 +59,8 @@ namespace CheckmarksWebApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context)
         {
 
-            context.Database.Migrate();
+            // tQ: switched off for now
+            //context.Database.Migrate();
 
             if (env.IsDevelopment())
             {

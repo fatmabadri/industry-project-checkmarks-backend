@@ -13,6 +13,8 @@ namespace CheckmarksWebApi.Models
         public DbSet<NICEClass> NICEClasses { get; set; }
         public DbSet<NICETerm> NICETerms { get; set; }
 
+        public DbSet<Trademark> Trademarks { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
