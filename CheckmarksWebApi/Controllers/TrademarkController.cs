@@ -88,46 +88,53 @@ namespace CheckmarksWebApi.Controllers
 
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(cipoSearchString);
-            string dataResponse = await response.Content.ReadAsStringAsync();
 
-            return Ok(response);
+            if (response.IsSuccessStatusCode)
+            {
+                string dataResponse = await response.Content.ReadAsStringAsync();
 
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    string dataResponse = await response.Content.ReadAsStringAsync();
+                Root apiObjects = JsonConvert.DeserializeObject<Root>(dataResponse);
 
-            //    Root apiObjects = JsonConvert.DeserializeObject<Root>(dataResponse);
+                foreach (var tm in apiObjects.data)
+                {
+                    _context.Trademarks.Add(
+                        new Trademark(
+                            tm.title,
+                            tm.fileDate,
+                            tm.regDate,
+                            tm.intrnlRenewDate,
+                            tm.owner,
+                            tm.statusDescEn,
+                            tm.niceClasses,
+                            tm.tmType,
+                            tm.applicationNumberL,
+                            tm.mediaUrls
+                        )
+                    );
 
-            //    foreach (var tm in apiObjects.data)
-            //    {
-            //        _context.Trademarks.Add(
-            //            new Trademark(
+                    // int[] NiceClasses
+                    // int[] TmType 
+                    // string[] ApplicationNumberL 
+                    // string[] MediaUrls 
 
-            //            )
-            //        );
+                    HashSet<int> set = new HashSet<int>();
 
-            //        // NICEClass[] NiceClasses
-            //        // int[] TmType 
-            //        // string[] ApplicationNumberL 
-            //        // string[] MediaUrls 
+                    foreach (var nc in tm.niceClasses)
+                    {
+                        set.Add(nc);
+                    }
 
-            //        HashSet<int> set = new HashSet<int>();
+                    foreach (var nc in set)
+                    {
+                        tm.niceClasses.Add(new MovieGenre(m.id, g));
 
-            //        foreach (var nc in tm.niceClasses)
-            //        {
-            //            set.Add(nc);
-            //        }
-
-            //        foreach (var nc in set)
-            //        {
-            //            tm.niceClasses.Add(new MovieGenre(m.id, g));
-
-            //        }
-            //    }
-            //} else
-            //{
-            //    return BadRequest("There was a problem getting results from the CIPO API");
-            //}
+                    }
+                }
+            }
+            else
+            {
+                return BadRequest("There was a problem getting results from the CIPO API");
+            }
         }
     }
 }

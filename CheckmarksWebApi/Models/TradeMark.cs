@@ -21,7 +21,7 @@ namespace CheckmarksWebApi.Models
         // "NIKE INNOVATE C.V."
         public string StatusDescEn { get; set; }
         // "REGISTERED"
-        public NICEClass[] NiceClasses { get; set; }
+        public int[] NiceClasses { get; set; }
         // 0	9
         // 1	10
         // 2	16
@@ -36,5 +36,28 @@ namespace CheckmarksWebApi.Models
         // 2	"1060300-00"
         public string[] MediaUrls { get; set; }
         // null
+
+        public Trademark(string title,
+            DateTime fileDate,
+            DateTime regDate,
+            DateTime intrnlRenewDate,
+            string owner,
+            string statusDescEn,
+            int[] niceClasses,
+            int[] tmType,
+            string[] applicationNumberL,
+            string[] mediaUrls)
+        {
+            Title = title;
+            FileDate = fileDate;
+            RegDate = regDate;
+            IntrnlRenewDate = intrnlRenewDate;
+            Owner = owner;
+            StatusDescEn = statusDescEn;
+            NiceClasses = niceClasses;
+            TmType = tmType;
+            ApplicationNumberL = applicationNumberL;
+            MediaUrls = mediaUrls;
+        }
     }
 }
