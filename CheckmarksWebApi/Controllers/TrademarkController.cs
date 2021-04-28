@@ -112,24 +112,11 @@ namespace CheckmarksWebApi.Controllers
                         )
                     );
 
-                    // int[] NiceClasses
-                    // int[] TmType 
-                    // string[] ApplicationNumberL 
-                    // string[] MediaUrls 
+                    // tQ: establishing no relationship to NICEClasses for now
+                    //HashSet<int> set = new HashSet<int>();
 
-                    HashSet<int> set = new HashSet<int>();
-
-                    foreach (var nc in tm.niceClasses)
-                    {
-                        set.Add(nc);
-                    }
-
-                    foreach (var nc in set)
-                    {
-                        tm.niceClasses.Add(new MovieGenre(m.id, g));
-
-                    }
                 }
+                return Ok("TMs added to db");
             }
             else
             {
