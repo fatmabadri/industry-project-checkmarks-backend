@@ -37,17 +37,25 @@ namespace CheckmarksWebApi.Controllers
         }
 
         // GET: api/trademark
-        // tQ: initial solution only--GET requests should not affect server state (results should be cached)
-        [HttpGet]
+        [HttpGet("{searchString}")]
         public async Task<ActionResult<IEnumerable<Trademark>>> Index(string searchString)
         {
             try {
-                var trademarks = _context.Trademarks;
+                var trademarksDb = _context.Trademarks;
+
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    var trademarks_query = trademarks
+                    // tQ: query cache first
+                    var trademarksQuery = trademarksDb
                         .Where(tm => (tm.Title.Contains(searchString) || tm.Owner.Contains(searchString)));
-                    var trademarks_ret = trademarks_query.Select(tm => new {
+                    if (trademarksQuery.ToList().Count < 1 ) { 
+                        var trademarksLst = await GetTMsFromCIPO(searchString);
+                        
+                        // tQ: TODO add to db
+                    }
+
+
+                    var trademarksRet = trademarksQuery.Select(tm => new {
                         tm.Title,
                         tm.FileDate,
                         tm.RegDate,
@@ -59,9 +67,9 @@ namespace CheckmarksWebApi.Controllers
                         tm.ApplicationNumberL,
                         tm.MediaUrls
                     });
-                    var trademarks_lst = await trademarks_ret.ToListAsync();
-                    return Ok(trademarks_lst);
-                } else
+                    return Ok(trademarksRet);
+                } 
+                else
                 {
                     return BadRequest("Search string empty");
                 }
@@ -72,6 +80,8 @@ namespace CheckmarksWebApi.Controllers
             }
         }
 
+        [Route("api/(controller)/test")]
+        [HttpGet("{searchString}")]
         public async Task<ActionResult<IEnumerable<Trademark>>> GetTMsFromCIPO(string searchString)
         {
             // tQ: full string
@@ -80,42 +90,44 @@ namespace CheckmarksWebApi.Controllers
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(cipoSearchString);
 
-            if (response.IsSuccessStatusCode)
-            {
-                string dataResponse = await response.Content.ReadAsStringAsync();
+            return Ok(response);
 
-                Root apiObjects = JsonConvert.DeserializeObject<Root>(dataResponse);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    string dataResponse = await response.Content.ReadAsStringAsync();
 
-                foreach (var tm in apiObjects.data)
-                {
-                    _context.Trademarks.Add(
-                        new Trademark(
+            //    Root apiObjects = JsonConvert.DeserializeObject<Root>(dataResponse);
 
-                        )
-                    );
+            //    foreach (var tm in apiObjects.data)
+            //    {
+            //        _context.Trademarks.Add(
+            //            new Trademark(
 
-                    // NICEClass[] NiceClasses
-                    // int[] TmType 
-                    // string[] ApplicationNumberL 
-                    // string[] MediaUrls 
+            //            )
+            //        );
 
-                    HashSet<int> set = new HashSet<int>();
+            //        // NICEClass[] NiceClasses
+            //        // int[] TmType 
+            //        // string[] ApplicationNumberL 
+            //        // string[] MediaUrls 
 
-                    foreach (var nc in tm.niceClasses)
-                    {
-                        set.Add(nc);
-                    }
+            //        HashSet<int> set = new HashSet<int>();
 
-                    foreach (var nc in set)
-                    {
-                        tm.niceClasses.Add(new MovieGenre(m.id, g));
+            //        foreach (var nc in tm.niceClasses)
+            //        {
+            //            set.Add(nc);
+            //        }
 
-                    }
-                }
-            } else
-            {
+            //        foreach (var nc in set)
+            //        {
+            //            tm.niceClasses.Add(new MovieGenre(m.id, g));
 
-            }
+            //        }
+            //    }
+            //} else
+            //{
+            //    return BadRequest("There was a problem getting results from the CIPO API");
+            //}
         }
     }
 }
