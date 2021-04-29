@@ -99,6 +99,7 @@ namespace CheckmarksWebApi.Controllers
                 {
                     _context.Trademarks.Add(
                         new Trademark(
+                            tm.applicationNumber,
                             tm.title,
                             tm.fileDate,
                             tm.regDate,

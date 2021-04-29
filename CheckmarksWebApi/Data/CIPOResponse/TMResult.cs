@@ -8,6 +8,7 @@ namespace CheckmarksWebApi.Data.CIPOResponse
 {
     public class TMResult
     {
+        public string applicationNumber { get; set; }
         public string title { get; set; }
         public DateTime fileDate { get; set; }
         public DateTime regDate { get; set; }
