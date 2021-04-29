@@ -9,6 +9,9 @@ namespace CheckmarksWebApi.Models
 {
     public class Trademark
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string ApplicationNumber { get; set; }
         public string Title { get; set; }
         // "NIKE"
         public DateTime FileDate { get; set; }
@@ -37,7 +40,8 @@ namespace CheckmarksWebApi.Models
         public string[] MediaUrls { get; set; }
         // null
 
-        public Trademark(string title,
+        public Trademark(string applicationnumber,
+            string title,
             DateTime fileDate,
             DateTime regDate,
             DateTime intrnlRenewDate,
@@ -48,6 +52,7 @@ namespace CheckmarksWebApi.Models
             string[] applicationNumberL,
             string[] mediaUrls)
         {
+            ApplicationNumber = applicationnumber;
             Title = title;
             FileDate = fileDate;
             RegDate = regDate;
