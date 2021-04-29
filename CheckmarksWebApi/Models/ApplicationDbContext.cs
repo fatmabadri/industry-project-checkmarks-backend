@@ -23,19 +23,19 @@ namespace CheckmarksWebApi.Models
         protected override void OnModelCreating(ModelBuilder mBuilder)
         {
             mBuilder.Entity<Trademark>()
-                .Property<string>("NICEClasses")
+                .Property<string>("NiceClassesCollection")
                 .HasField("_niceClasses");
 
             mBuilder.Entity<Trademark>()
-                .Property<string>("TmType")
+                .Property<string>("TmTypeCollection")
                 .HasField("_tmType");
 
             mBuilder.Entity<Trademark>()
-                .Property<string>("ApplicationNumberL")
+                .Property<string>("ApplicationNumberLCollection")
                 .HasField("_applicationNumberL");
 
             mBuilder.Entity<Trademark>()
-                .Property<string>("MediaUrls")
+                .Property<string>("MediaUrlsCollection")
                 .HasField("_mediaUrls");
         }
 }

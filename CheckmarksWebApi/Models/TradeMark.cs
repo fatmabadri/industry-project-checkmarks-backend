@@ -22,7 +22,7 @@ namespace CheckmarksWebApi.Models
         public string StatusDescEn { get; set; }
         // "REGISTERED"
 
-        public string _niceClasses { get; set; }
+        private string _niceClasses;
         [NotMapped]
         public int[] NiceClasses
         {
@@ -42,7 +42,7 @@ namespace CheckmarksWebApi.Models
         // 3	18
         // 4	20
         // 5	28
-        public string _tmType { get; set; }
+        private string _tmType;
         [NotMapped]
         public int[] TmType
         {
@@ -56,7 +56,7 @@ namespace CheckmarksWebApi.Models
             }
         }
         // 0	1
-        public string _applicationNumberL { get; set; }
+        private string _applicationNumberL;
         [NotMapped]
         public string[] ApplicationNumberL
         {
@@ -69,7 +69,7 @@ namespace CheckmarksWebApi.Models
         // 0	"1060300"
         // 1	"106030000"
         // 2	"1060300-00"
-        public string _mediaUrls { get; set; }
+        private string _mediaUrls;
         [NotMapped]
         public string[] MediaUrls
         {
