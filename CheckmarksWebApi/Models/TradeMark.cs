@@ -40,7 +40,7 @@ namespace CheckmarksWebApi.Models
         public string[] MediaUrls { get; set; }
         // null
 
-        public Trademark(string applicationnumber,
+        public Trademark(string applicationNumber,
             string title,
             DateTime fileDate,
             DateTime regDate,
@@ -52,7 +52,7 @@ namespace CheckmarksWebApi.Models
             string[] applicationNumberL,
             string[] mediaUrls)
         {
-            ApplicationNumber = applicationnumber;
+            ApplicationNumber = applicationNumber;
             Title = title;
             FileDate = fileDate;
             RegDate = regDate;
