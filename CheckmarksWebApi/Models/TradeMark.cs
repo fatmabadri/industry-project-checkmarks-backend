@@ -21,64 +21,20 @@ namespace CheckmarksWebApi.Models
         // "NIKE INNOVATE C.V."
         public string StatusDescEn { get; set; }
         // "REGISTERED"
-
-        private string _niceClasses;
-        [NotMapped]
-        public int[] NiceClasses
-        {
-            get
-            {
-                var strings = _niceClasses.Split(",");
-                return Array.ConvertAll(strings, int.Parse);
-            }
-            set
-            {
-                _niceClasses = string.Join(",", value);
-            }
-        }
+        public string[] NiceClasses { get; set; }
         // 0	9
         // 1	10
         // 2	16
         // 3	18
         // 4	20
         // 5	28
-        private string _tmType;
-        [NotMapped]
-        public int[] TmType
-        {
-            get {
-                var strings = _tmType.Split(",");
-                return Array.ConvertAll(strings, int.Parse);
-            }
-            set
-            {
-                _tmType = string.Join(",", value);
-            }
-        }
+        public string[] TmType { get; set; }
         // 0	1
-        private string _applicationNumberL;
-        [NotMapped]
-        public string[] ApplicationNumberL
-        {
-            get { return _applicationNumberL.Split(","); }
-            set
-            {
-                _applicationNumberL = string.Join(",", value);
-            }
-        }
+        public string[] ApplicationNumberL { get; set; }
         // 0	"1060300"
         // 1	"106030000"
         // 2	"1060300-00"
-        private string _mediaUrls;
-        [NotMapped]
-        public string[] MediaUrls
-        {
-            get { return _mediaUrls.Split(","); }
-            set
-            {
-                _mediaUrls = string.Join(",", value);
-            }
-        }
+        public string[] MediaUrls { get; set; }
         // null
 
         public Trademark(string title,
@@ -87,8 +43,8 @@ namespace CheckmarksWebApi.Models
             DateTime intrnlRenewDate,
             string owner,
             string statusDescEn,
-            int[] niceClasses,
-            int[] tmType,
+            string[] niceClasses,
+            string[] tmType,
             string[] applicationNumberL,
             string[] mediaUrls)
         {

@@ -23,20 +23,28 @@ namespace CheckmarksWebApi.Models
         protected override void OnModelCreating(ModelBuilder mBuilder)
         {
             mBuilder.Entity<Trademark>()
-                .Property<string>("NiceClassesCollection")
-                .HasField("_niceClasses");
+                .Property(e => e.NiceClasses)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
             mBuilder.Entity<Trademark>()
-                .Property<string>("TmTypeCollection")
-                .HasField("_tmType");
+                .Property(e => e.TmType)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
             mBuilder.Entity<Trademark>()
-                .Property<string>("ApplicationNumberLCollection")
-                .HasField("_applicationNumberL");
+                .Property(e => e.ApplicationNumberL)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
             mBuilder.Entity<Trademark>()
-                .Property<string>("MediaUrlsCollection")
-                .HasField("_mediaUrls");
+                .Property(e => e.MediaUrls)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
         }
 }
 }
