@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CheckmarksWebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210429191547_AddTradeMarks")]
+    [Migration("20210429225637_AddTradeMarks")]
     partial class AddTradeMarks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace CheckmarksWebApi.Migrations
                     b.Property<DateTime>("FileDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("IntrnlRenewDate")
+                    b.Property<DateTime?>("IntrnlRenewDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MediaUrls")
@@ -80,7 +80,7 @@ namespace CheckmarksWebApi.Migrations
                     b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("RegDate")
+                    b.Property<DateTime?>("RegDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StatusDescEn")

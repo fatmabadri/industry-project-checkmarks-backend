@@ -95,9 +95,14 @@ namespace CheckmarksWebApi.Controllers
 
                 Root apiObjects = JsonConvert.DeserializeObject<Root>(dataResponse);
 
+                var addTrademarks = new List<Trademark>();
+
+                // tQ: TODO for dev / debug purposes only--need to add duplicate key check
+                _context.Database.ExecuteSqlRaw("DELETE FROM [Trademarks]");
+
                 foreach (var tm in apiObjects.data)
                 {
-                    _context.Trademarks.Add(
+                    addTrademarks.Add(
                         new Trademark(
                             tm.applicationNumber,
                             tm.title,
@@ -115,8 +120,12 @@ namespace CheckmarksWebApi.Controllers
 
                     // tQ: establishing no relationship to NICEClasses for now
                     //HashSet<int> set = new HashSet<int>();
-
                 }
+
+                await _context.Trademarks.AddRangeAsync(addTrademarks);
+
+                await _context.SaveChangesAsync();
+
                 return Ok("TMs added to db");
             }
             else

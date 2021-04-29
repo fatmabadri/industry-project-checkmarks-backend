@@ -11,8 +11,8 @@ namespace CheckmarksWebApi.Data.CIPOResponse
         public string applicationNumber { get; set; }
         public string title { get; set; }
         public DateTime fileDate { get; set; }
-        public DateTime regDate { get; set; }
-        public DateTime intrnlRenewDate { get; set; }
+        public DateTime? regDate { get; set; }
+        public DateTime? intrnlRenewDate { get; set; }
         public string owner { get; set; }
         public string statusDescEn { get; set; }
         public string[] niceClasses { get; set; }

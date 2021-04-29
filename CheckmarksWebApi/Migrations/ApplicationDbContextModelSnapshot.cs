@@ -66,7 +66,7 @@ namespace CheckmarksWebApi.Migrations
                     b.Property<DateTime>("FileDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("IntrnlRenewDate")
+                    b.Property<DateTime?>("IntrnlRenewDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MediaUrls")
@@ -78,7 +78,7 @@ namespace CheckmarksWebApi.Migrations
                     b.Property<string>("Owner")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("RegDate")
+                    b.Property<DateTime?>("RegDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StatusDescEn")

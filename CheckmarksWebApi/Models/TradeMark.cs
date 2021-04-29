@@ -16,9 +16,9 @@ namespace CheckmarksWebApi.Models
         // "NIKE"
         public DateTime FileDate { get; set; }
         // "2000-05-24T00:00:00"
-        public DateTime RegDate { get; set; }
+        public DateTime? RegDate { get; set; }
         // "2003-06-11T00:00:00"
-        public DateTime IntrnlRenewDate { get; set; }
+        public DateTime? IntrnlRenewDate { get; set; }
         // "2033-06-11T00:00:00"
         public string Owner { get; set; }
         // "NIKE INNOVATE C.V."
@@ -43,8 +43,8 @@ namespace CheckmarksWebApi.Models
         public Trademark(string applicationNumber,
             string title,
             DateTime fileDate,
-            DateTime regDate,
-            DateTime intrnlRenewDate,
+            DateTime? regDate,
+            DateTime? intrnlRenewDate,
             string owner,
             string statusDescEn,
             string[] niceClasses,
