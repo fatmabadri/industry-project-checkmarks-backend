@@ -21,20 +21,64 @@ namespace CheckmarksWebApi.Models
         // "NIKE INNOVATE C.V."
         public string StatusDescEn { get; set; }
         // "REGISTERED"
-        public int[] NiceClasses { get; set; }
+
+        public string _niceClasses { get; set; }
+        [NotMapped]
+        public int[] NiceClasses
+        {
+            get
+            {
+                var strings = _niceClasses.Split(",");
+                return Array.ConvertAll(strings, int.Parse);
+            }
+            set
+            {
+                _niceClasses = string.Join(",", value);
+            }
+        }
         // 0	9
         // 1	10
         // 2	16
         // 3	18
         // 4	20
         // 5	28
-        public int[] TmType { get; set; }
+        public string _tmType { get; set; }
+        [NotMapped]
+        public int[] TmType
+        {
+            get {
+                var strings = _tmType.Split(",");
+                return Array.ConvertAll(strings, int.Parse);
+            }
+            set
+            {
+                _tmType = string.Join(",", value);
+            }
+        }
         // 0	1
-        public string[] ApplicationNumberL { get; set; }
+        public string _applicationNumberL { get; set; }
+        [NotMapped]
+        public string[] ApplicationNumberL
+        {
+            get { return _applicationNumberL.Split(","); }
+            set
+            {
+                _applicationNumberL = string.Join(",", value);
+            }
+        }
         // 0	"1060300"
         // 1	"106030000"
         // 2	"1060300-00"
-        public string[] MediaUrls { get; set; }
+        public string _mediaUrls { get; set; }
+        [NotMapped]
+        public string[] MediaUrls
+        {
+            get { return _mediaUrls.Split(","); }
+            set
+            {
+                _mediaUrls = string.Join(",", value);
+            }
+        }
         // null
 
         public Trademark(string title,
