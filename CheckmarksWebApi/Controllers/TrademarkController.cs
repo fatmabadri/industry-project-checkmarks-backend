@@ -88,46 +88,50 @@ namespace CheckmarksWebApi.Controllers
 
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(cipoSearchString);
-            string dataResponse = await response.Content.ReadAsStringAsync();
 
-            return Ok(response);
+            if (response.IsSuccessStatusCode)
+            {
+                string dataResponse = await response.Content.ReadAsStringAsync();
 
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    string dataResponse = await response.Content.ReadAsStringAsync();
+                Root apiObjects = JsonConvert.DeserializeObject<Root>(dataResponse);
 
-            //    Root apiObjects = JsonConvert.DeserializeObject<Root>(dataResponse);
+                var addTrademarks = new List<Trademark>();
 
-            //    foreach (var tm in apiObjects.data)
-            //    {
-            //        _context.Trademarks.Add(
-            //            new Trademark(
+                // tQ: TODO for dev / debug purposes only--need to add duplicate key check
+                _context.Database.ExecuteSqlRaw("DELETE FROM [Trademarks]");
 
-            //            )
-            //        );
+                foreach (var tm in apiObjects.data)
+                {
+                    addTrademarks.Add(
+                        new Trademark(
+                            tm.applicationNumber,
+                            tm.title,
+                            tm.fileDate,
+                            tm.regDate,
+                            tm.intrnlRenewDate,
+                            tm.owner,
+                            tm.statusDescEn,
+                            tm.niceClasses,
+                            tm.tmType,
+                            tm.applicationNumberL,
+                            tm.mediaUrls
+                        )
+                    );
 
-            //        // NICEClass[] NiceClasses
-            //        // int[] TmType 
-            //        // string[] ApplicationNumberL 
-            //        // string[] MediaUrls 
+                    // tQ: establishing no relationship to NICEClasses for now
+                    //HashSet<int> set = new HashSet<int>();
+                }
 
-            //        HashSet<int> set = new HashSet<int>();
+                await _context.Trademarks.AddRangeAsync(addTrademarks);
 
-            //        foreach (var nc in tm.niceClasses)
-            //        {
-            //            set.Add(nc);
-            //        }
+                await _context.SaveChangesAsync();
 
-            //        foreach (var nc in set)
-            //        {
-            //            tm.niceClasses.Add(new MovieGenre(m.id, g));
-
-            //        }
-            //    }
-            //} else
-            //{
-            //    return BadRequest("There was a problem getting results from the CIPO API");
-            //}
+                return Ok("TMs added to db");
+            }
+            else
+            {
+                return BadRequest("There was a problem getting results from the CIPO API");
+            }
         }
     }
 }

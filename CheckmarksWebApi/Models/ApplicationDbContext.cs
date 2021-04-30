@@ -19,5 +19,32 @@ namespace CheckmarksWebApi.Models
         {
 
         }
-    }
+
+        protected override void OnModelCreating(ModelBuilder mBuilder)
+        {
+            mBuilder.Entity<Trademark>()
+                .Property(e => e.NiceClasses)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
+
+            mBuilder.Entity<Trademark>()
+                .Property(e => e.TmType)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
+
+            mBuilder.Entity<Trademark>()
+                .Property(e => e.ApplicationNumberL)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
+
+            mBuilder.Entity<Trademark>()
+                .Property(e => e.MediaUrls)
+                .HasConversion(
+                    v => string.Join(",", v),
+                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
+        }
+}
 }

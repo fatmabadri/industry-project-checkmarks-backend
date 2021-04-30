@@ -8,6 +8,6 @@ namespace CheckmarksWebApi.Data.CIPOResponse
 {
     public class Root
     {
-        public List<TMResult>[] data;
+        public List<TMResult> data;
     }
 }
