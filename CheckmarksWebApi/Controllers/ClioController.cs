@@ -24,7 +24,6 @@ namespace CheckmarksWebApi.Controllers
     {
 
         // from free trial (test)
-        // tQ: removed string
         // private string clioToken = "Bearer ";
             
         // real golbey clio token

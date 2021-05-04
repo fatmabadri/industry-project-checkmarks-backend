@@ -35,10 +35,7 @@ namespace CheckmarksService
 
                     //DI config file and db context 
                     IConfiguration configuration = hostContext.Configuration;
-
-                    // tQ: all strings from appsettings.json under "Constants" and matching ConfigurationOptions fields
                     ConfigurationOptions config = configuration.GetSection("Constants").Get<ConfigurationOptions>();
-
                     services.AddSingleton(config);
 
                     var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
@@ -47,10 +44,8 @@ namespace CheckmarksService
                     services.AddHostedService<ScheduledService>();
 
                     // optionsBuilder.UseSqlite(config.ConnString);  //if breaks in db, put this above addScoped
-                    
-                    // tQ: replaced hard-coded value with config
-                    string azureConnection = config.AzureConnection;
 
+                    string azureConnection = config.AzureConnection;
                     optionsBuilder.UseSqlServer(azureConnection);
 
 

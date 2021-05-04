@@ -23,7 +23,7 @@ namespace CheckmarksService
         public static ILogger<ScheduledService> Logger;
 
         // tQ: replaced hard-coded value with config; passing into both functions
-        //private static string userKey = "";
+        // private static string userKey = "";
 
         public static async Task GetClasses(string userKey)
         {
@@ -92,7 +92,6 @@ namespace CheckmarksService
             }
         }
 
-        // tQ: passing in userKey rather than hard-coding it
         public static async Task GetTerms(int classId, string userKey)
         {
             //https://cipo-gsm-ised-isde-apicast-production.api.canada.ca/v1/classes/2/terms?lang=en
