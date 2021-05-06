@@ -59,6 +59,7 @@ namespace CheckmarksWebApi.Controllers
                 data = JsonConvert.DeserializeObject<TrademarkRootObject>(response);
 
                 data.FixUrls();
+                data.FixTitle();
 
                 return Ok(data);
             }

@@ -19,5 +19,16 @@ namespace CheckmarksWebApi.ViewModels.TrademarksModel
                 }
             }
         }
+
+        public void FixTitle()
+        {
+            if (Data != null)
+            {
+                foreach (TrademarkData data in Data)
+                {
+                    data.FixTitle();
+                }
+            }
+        }
     }
 }

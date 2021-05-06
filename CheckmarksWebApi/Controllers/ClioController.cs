@@ -23,14 +23,12 @@ namespace CheckmarksWebApi.Controllers
     public class ClioController : ControllerBase
     {
 
-        // from free trial (test)
-        // private string clioToken = "Bearer ";
-            
-        // real golbey clio token
-        private string clioToken;
-
+        private string refreshToken;
         private string contactsUrl;
         private string mattersUrl;
+        private string tokenUrl;
+
+        private HttpClient client;
 
         private readonly IConfiguration _config;
 
@@ -40,22 +38,32 @@ namespace CheckmarksWebApi.Controllers
             _config = config;
             _logger = logger;
 
-            clioToken = _config["ClioToken"];
+            refreshToken = _config["ClioRefreshToken"];
             contactsUrl = _config["ClioContactsUrl"];
             mattersUrl = _config["ClioMattersUrl"];
+            tokenUrl = _config["ClioTokenUrl"];
+            client = new HttpClient();
         }
 
         [HttpPost]
         public async Task<IActionResult> PostNewContactAndMatter([FromBody] Contact c)
         {
             _logger.LogInformation($"{DateTime.Now} [api/clio] - Posting new Checkmarks contact to Clio");
-
-
-
-            HttpClient client = new HttpClient();
             
+            var newtoken = "Bearer ";
+            try {
+                var tmp = await getNewToken();
+                // append the new token to 'Bearer '
+                newtoken += tmp;
+                _logger.LogInformation($"{DateTime.Now} [api/clio] - got a new Clio Access Token: {newtoken}");
+            } catch(Exception e) {
+                _logger.LogError($"{DateTime.Now} [api/clio] - Token Refresh Failed; {e.StackTrace}");
+                return BadRequest($"Token Refresh Failed; {e.StackTrace}");
+            }
+            
+
             // POST new contact to clio
-            client.DefaultRequestHeaders.Add("Authorization", clioToken);
+            client.DefaultRequestHeaders.Add("Authorization", newtoken);
             var temp = await client.PostAsync(contactsUrl,
                 new StringContent(JsonConvert.SerializeObject(c), Encoding.UTF8, "application/json"));
             
@@ -105,26 +113,35 @@ namespace CheckmarksWebApi.Controllers
             return Ok(matterResponse);
         }
 
+        // gets a new token
+        private async Task<String> getNewToken() {
+            var client_id = _config["ClientID"];
+            var client_secret = _config["ClientSecret"];
 
-        
+            // build refresh request
+            var form = new Dictionary<string, string>();
+            form.Add("grant_type", "refresh_token");
+            form.Add("refresh_token", $"{refreshToken}");
+            form.Add("client_id", $"{client_id}");
+            form.Add("client_secret", $"{client_secret}");
+            var formEncoded = new FormUrlEncodedContent(form);
 
-
-
-        // disabled because client information is confidential
-
-        // [HttpGet]
-        // public async Task<IActionResult> Get()
-        // {
-        //     string url = "https://app.clio.com/api/v4/contacts.json"; 
-        //     using (HttpClient client = new HttpClient())
-        //     {
-        //         client.DefaultRequestHeaders.Add("Authorization", clioToken);
-        //         var temp = await client.GetStringAsync(url);
-        //         return Ok(temp);
-        //     }
-        // }
+            // send request
+            var tokenRefreshResponse = await client.PostAsync(tokenUrl, formEncoded);
+            
+            if (tokenRefreshResponse.IsSuccessStatusCode) {
+                var content = await tokenRefreshResponse.Content.ReadAsStringAsync();
+                TokenRefreshResponse trr = JsonConvert.DeserializeObject<TokenRefreshResponse>(content);
+                return trr.access_token;
+            } else {
+                Console.WriteLine(tokenRefreshResponse);
+                throw new Exception(tokenRefreshResponse.ReasonPhrase);
+            }
+        }
     }
 
-
-    
+    public class TokenRefreshResponse {
+        [JsonProperty("access_token")]
+        public string access_token;
+    }
 }

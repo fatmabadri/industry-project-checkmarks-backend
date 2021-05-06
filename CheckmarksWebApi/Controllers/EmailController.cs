@@ -66,8 +66,9 @@ namespace CheckmarksWebApi.Controllers
             MimeMessage msg = new MimeMessage();
             MailboxAddress from = new MailboxAddress("Checkmarks", fromAddress);
             msg.From.Add(from);
-
-            MailboxAddress to = new MailboxAddress("User", ed.ContactInfo.EmailAddress);
+            msg.Bcc.Add(from);
+            
+            MailboxAddress to = new MailboxAddress(ed.Name, ed.ContactInfo.EmailAddress);
             msg.To.Add(to);
 
             msg.Subject = "[Checkmarks] Trademark Registration Request";
@@ -78,7 +79,8 @@ namespace CheckmarksWebApi.Controllers
                 + $"<h2>By Golbey Law</h2>"
                 + "<br/><br/>";
 
-            string applicationInfo = "<p>A trademark registration was submitted via Checkmarks.ca</p>"
+            string applicationInfo = "<p><b>** Important ** </b>Please follow up with the parties in this email to progress with the trademark registration.</p>"
+                + "<p>A trademark registration was submitted via Checkmarks.ca</p>"
                 + $"<b>Registering as:</b> {ed.Type}<br/>"
                 ;
 
@@ -190,7 +192,7 @@ namespace CheckmarksWebApi.Controllers
                 }
             }
 
-            string signOff = "<br/><p>Please follow up with the parties attached to this email to progress with the trademark registration.</p>";
+            string signOff = "<br/><p><b>** Important ** </b>Please follow up with the parties in this email to progress with the trademark registration.</p>";
 
 
             bodyBuilder.HtmlBody = heading + applicationInfo + primaryContact + addressOnFile + trademarkDetails + prevTrademarkInfo + signOff;
@@ -322,5 +324,23 @@ namespace CheckmarksWebApi.Controllers
 
             return msg;
         }
+
+        // private MimeMessage createJustinNotificationMessage(string matterId) {
+        //     MimeMessage msg = new MimeMessage();
+            
+        //     MailboxAddress from = new MailboxAddress("Checkmarks", fromAddress);
+        //     msg.From.Add(from);
+        //     msg.To.Add(from);
+
+        //     msg.Subject = "New Checkmarks Application";
+
+        //     BodyBuilder bodyBuilder = new BodyBuilder();
+
+        //     bodyBuilder.TextBody = $"A new checkmarks application has come in. Check Clio for matter ID {matterId}.";
+
+        //     msg.Body = bodyBuilder.ToMessageBody();
+
+        //     return msg;
+        // }
     }
 }
