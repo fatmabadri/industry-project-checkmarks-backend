@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CheckmarksWebApi.ViewModels.TrademarksModel
 {
     public class TrademarkData
     {
-        public string Heading { get; set; }
+        public string Title { get; set; }
         public DateTime? FileDate { get; set; }
         public DateTime? RegDate { get; set; }  //register date
         public DateTime? IntrnlRenewDate { get; set; }
@@ -30,6 +31,14 @@ namespace CheckmarksWebApi.ViewModels.TrademarksModel
                 }
             }
         }
+
+        public void FixTitle()
+        {
+            if (Title != null)
+            {
+                Title = HttpUtility.HtmlDecode(Title);
+            }
+        } 
 
     }
 }
