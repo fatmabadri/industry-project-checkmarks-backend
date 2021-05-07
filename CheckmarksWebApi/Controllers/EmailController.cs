@@ -168,7 +168,7 @@ namespace CheckmarksWebApi.Controllers
                         _logger.LogError($"{DateTime.Now} [api/email] - Failed to attach ID file.\n{e.ToString()}");
                     }
                 } else
-                // tQ: todo: check if this is needed
+                // tQ: check if this is needed
                 {
                     _logger.LogError($"{DateTime.Now} [api/email] - No ID file name provided.");
                 }
@@ -307,6 +307,8 @@ namespace CheckmarksWebApi.Controllers
 
         [HttpPost("test")]
         public async Task<IActionResult> Test([FromBody] string testToAddress) {
+
+            deleteOldPics();
 
             SmtpClient smtp = new SmtpClient();
             MimeMessage msg = createTestMessage(fromAddress, testToAddress);
