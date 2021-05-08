@@ -156,6 +156,21 @@ namespace CheckmarksWebApi.Controllers
                 {
                     ed.TrademarkInfo.FileName = "none";
                 }
+
+                // tQ: add uploaded Id
+                string idfn = uploadsFolder + ed.IdFileName;
+                if (System.IO.File.Exists(idfn)) {
+                    try
+                    {
+                        bodyBuilder.Attachments.Add(idfn);
+                    } catch (Exception e)
+                    {
+                        _logger.LogError($"{DateTime.Now} [api/email] - Failed to attach ID file.\n{e.ToString()}");
+                    }
+                } else
+                {
+                    _logger.LogError($"{DateTime.Now} [api/email] - No ID file name provided.");
+                }
                 
                 trademarkDetails += $"<b>Image File:</b> {ed.TrademarkInfo.FileName}<br/>";
 
@@ -234,6 +249,9 @@ namespace CheckmarksWebApi.Controllers
             if (ed.TrademarkInfo != null && !string.IsNullOrEmpty(ed.TrademarkInfo.FileName))
             {
                 deleteFile(uploadsFolder + ed.TrademarkInfo.FileName);
+
+                // tQ: also delete ID
+                deleteFile(uploadsFolder + ed.IdFileName);
             }
 
             // quick check to delete old files
@@ -300,7 +318,6 @@ namespace CheckmarksWebApi.Controllers
                 _logger.LogInformation(e.ToString());
                 return BadRequest("something went wrong");
             }
-
 
             return Ok("test email successful");
         }

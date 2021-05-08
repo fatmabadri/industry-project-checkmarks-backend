@@ -30,7 +30,8 @@ namespace CheckmarksWebApi.ViewModels
         [JsonProperty("addressInfo")]
         public Address AddressInfo {get;set;}
 
-
+        [JsonProperty("idFileName")]
+        public string IdFileName { get; set; }
     }
 
     public class ContactInfo
